@@ -99,6 +99,9 @@ void InsertNode(List &l)
 
 
 
+
+// ============================ chuc nang 1 ============================
+
 // tim nhan vien ban id
 Node *SearchID(Node *root, string id)
 {
@@ -135,6 +138,9 @@ void Function1(List& l) {
    employee newEmployee = createEmployee();
    InsertEmployee(l.first, newEmployee);
 }
+
+
+// ============================================================
 
 // Node* Hash_table[11];
 
