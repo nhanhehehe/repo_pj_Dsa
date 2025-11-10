@@ -259,6 +259,7 @@ void printOrg(Node *root, int level = 0)
 
 int main()
 {
-   cout << "HI";
+   cout << "HI\n";
+   cout << "test";
    return 0;
 }
