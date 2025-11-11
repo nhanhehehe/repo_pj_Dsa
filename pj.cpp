@@ -19,7 +19,7 @@ struct employee
    string name;
    string position;
    int year;
-   int manager;
+   string manager;
 };
 
 struct Node
@@ -29,6 +29,8 @@ struct Node
    Node *next;
    vector<Node *> children;
 };
+
+vector<Node *> employeeWaiting; // danh sach nhan vien k chinh thuc
 
 Node *createNode(employee nv)
 {
@@ -57,51 +59,57 @@ employee createEmployee()
    cout << "=== Nhap thong tin nhan vien moi ===\n";
    cout << "Nhap ma id: ";
    string id;
-   cin >> id;
-   nv.id = id;
+   while (true) {
+      int flag = 1;
+      cin >> id;
+      for (auto x : idArchieve) {
+         if (x == id) {
+            cout << "Ma nhan vien da ton tai!\n";
+            cout << "nhap lai: "; 
+            flag = 0;
+            break;    
+         }
+      }
+      if (flag) {
+         nv.id = id;
+         idArchieve.push_back(id);
+         break;
+      }
+   }
    cout << "Nhap ten: ";
-   string name;
    cin.ignore();
-   getline(cin, name);
-   nv.name = name;
+   getline(cin, nv.name);
    cout << "Nhap vi tri: ";
-   string pos;
-   cin >> pos;
-   nv.position = pos;
+   getline(cin, nv.position);
    cout << "Nhap nam lam viec: ";
-   int y;
-   cin >> y;
-   nv.year = y;
+   cin >> nv.year;
    cout << "Nhap ma quan ly: ";
-   int ma;
-   cin >> ma;
-   nv.manager = ma;
+   cin >> nv.manager;
    cout << endl << endl;
    return nv;
 }
 
 // them node vao sau
-void InsertNode(List &l)
-{
-   Node *nv = createNode(createEmployee());
-
-   if (l.first == NULL)
-   {
-      l.first = nv;
-      l.last = nv;
-   }
-   else
-   {
-      l.last->next = nv;
-      l.last = nv;
-   }
-}
+// void InsertNode(List &l)
+// {
+//    Node *nv = createNode(createEmployee());
+//
+//    if (l.first == NULL)
+//    {
+//       l.first = nv;
+//       l.last = nv;
+//    }
+//    else
+//    {
+//       l.last->next = nv;
+//       l.last = nv;
+//    }
+// }
 
 
 
 
 // ============================ chuc nang 1 ============================
-
 // tim nhan vien ban id
 Node *SearchID(Node *root, string id)
 {
@@ -120,122 +128,38 @@ Node *SearchID(Node *root, string id)
 }
 
 // them moi nhan vien
-void InsertEmployee(Node *root, employee nv)
+void InsertEmployee(List& l, employee nv)
 {
-   Node *add = SearchID(root, nv.id);
-   if (add == NULL)
-   {
+   
+   if (l.first == NULL)
+   {  
+      //them giam doc
+      l.first = createNode(nv);
+      cout << "them giam doc thanh cong!\n ";
+      return;
+   }
+
+   Node *manager = SearchID(l.first, nv.manager);
+   if (manager == NULL) {
+      employeeWaiting.push_back(createNode(nv));
+      cout << "Them nhan vien khong chinh thuc moi\n\n ";
       return;
    }
 
    Node *newEmployee = createNode(nv);
-   add->children.push_back(newEmployee);
+   manager->children.push_back(newEmployee);
    cout << "Them nhan vien thanh cong! " << endl << endl;
 }
 
 //chuc nang 1
 void Function1(List& l) {
    employee newEmployee = createEmployee();
-   InsertEmployee(l.first, newEmployee);
+   InsertEmployee(l, newEmployee);
 }
-
-
 // ============================================================
 
-// Node* Hash_table[11];
 
-// int hashing(int data) {
-//    return data % 11;
-// }
-
-// void insert(int data)  {
-//    int index = hashing(data);
-//    Node* temp = new Node;
-//    temp->data = data;
-//    if (Hash_table[index] == NULL) {
-//       Hash_table[index] = temp;
-//       return;
-//    }
-//    temp->next = Hash_table[index];
-//    Hash_table[index] = temp;
-// }
-
-// int find(int data) {
-//    int index = hashing(data);
-//    Node *curr = Hash_table[index];
-//    while (curr!= NULL) {
-//       if (curr->data == data) return 1;
-//       curr = curr->next;
-//    }
-//    return 0;
-// }
-
-// menu chuc nang
-void Menu(List& l)
-{
-   List p = l;
-   cout << "-------------------------------------------------------------------------------------------------------------\n";
-   cout << right << setw(70) << "=====  QUAN LY TO CHUC DOANH NGHIEP  =====\n";
-   cout << "1. Them nhan vien\n";
-   cout << "2. Xoa nhan vien\n";
-   cout << "3. Cap nhat thong tin nhan vien\n";
-   cout << "4. Hien thi so do to chuc\n";
-   cout << "5. Tim nhan vien theo ID\n";
-   cout << "6. Tim nhan vien theo Ten\n";
-   cout << "7. Luu du lieu ra file\n";
-   cout << "8. Tai du lieu tu file\n";
-   cout << "0. Thoat\n";
-   cout << "-------------------------------------------------------------------------------------------------------------\n";
-   cout << "Nhap lua chon: ";
-   int t;
-   while (true)
-   {
-      cin >> t;
-      if (t == 0)
-      {
-         cout << "Thoat chuong trinh ...";
-         return;
-      }
-      if (t == 1)
-      {
-         Function1(p);
-         break;
-      }
-      if (t == 2)
-      {
-         break;
-      }
-      if (t == 3)
-      {
-         break;
-      }
-      if (t == 4)
-      {
-         break;
-      }
-      if (t == 5)
-      {
-         break;
-      }
-      if (t == 6)
-      {
-         break;
-      }
-      if (t == 7)
-      {
-         break;
-      }
-      if (t == 8)
-      {
-         break;
-      }
-      else
-      {
-         cout << "!lua chon khong hop le!\n";
-         cout << "vui long chon lai: ";
-      }
-   }
-}
+//============================================
 
 void printOrg(Node *root, int level = 0)
 {
@@ -244,7 +168,7 @@ void printOrg(Node *root, int level = 0)
       return;
    // cout << "-------------------------------------------------------------------------------------------------------------\n";
    // cout << right << setw(80) << "===== CAU TRUC DOANH NGHIEP  =====\n\n";
-   // In thụt đầu dòng theo cấp bậc
+   
    for (int i = 0; i < level; i++)
       cout << '\t';
 
@@ -257,9 +181,93 @@ void printOrg(Node *root, int level = 0)
    // cout << "-------------------------------------------------------------------------------------------------------------\n\n";
 }
 
+void printUnOF(vector<Node *> ds) {
+   cout << endl;
+   cout << "Danh sach nhan vien khong chinh thuc:\n";
+   for (auto x : ds) {
+      cout << "- " << x->data.id << " | " << x->data.name << " | " << x->data.position << " | " << x->data.year << " | " << x->data.manager << endl;
+   }
+}
+
+//===========================================
+
+
+// menu chuc nang
+void Menu(List& l)
+{
+   while (true)
+   {
+      cout << "-------------------------------------------------------------------------------------------------------------\n";
+      cout << right << setw(70) << "=====  QUAN LY TO CHUC DOANH NGHIEP  =====\n";
+      cout << "1. Them nhan vien\n";
+      cout << "2. Xoa nhan vien\n";
+      cout << "3. Cap nhat thong tin nhan vien\n";
+      cout << "4. Hien thi so do to chuc\n";
+      cout << "5. Tim nhan vien theo ID\n";
+      cout << "6. Tim nhan vien theo Ten\n";
+      cout << "7. Luu du lieu ra file\n";
+      cout << "8. Tai du lieu tu file\n";
+      cout << "0. Thoat\n";
+      cout << "-------------------------------------------------------------------------------------------------------------\n";
+      cout << "Nhap lua chon: ";
+      int t; cin >> t;
+      cout << endl << endl;
+      switch (t) {
+         case 0:
+         {
+            cout << "Thoat chuong trinh ...";
+            return;
+         }
+         case 1:
+         {
+            Function1(l);
+            break;
+         }
+         case 2:
+         {
+            
+         }
+         case 3:
+         {
+            
+         }
+         case 4:
+         {  
+            cout << "Danh sach nhan vien chinh thuc\n";
+            printOrg(l.first);
+            printUnOF(employeeWaiting);
+            break;
+
+         }
+         case 5:
+         {
+            
+         }
+         case 6:
+         {
+            
+         }
+         case 7:
+         {
+            
+         }
+         case 8:
+         {
+            
+         }
+         default:
+         {
+            cout << "!lua chon khong hop le!\n";
+            cout << "vui long chon lai\n";
+         }
+      }
+      
+   }
+}
+
 int main()
 {
-   cout << "HI\n";
-   cout << "test";
-   return 0;
+   List l;
+   createList(l);
+   Menu(l);
 }

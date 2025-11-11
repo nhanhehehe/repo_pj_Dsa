@@ -1,0 +1,45 @@
+1
+01
+nhan nguyen
+ceo 
+2025
+01
+1
+02
+thu tang
+thu ky
+2025
+01
+1
+03
+skibidi
+security information
+2025
+01
+1
+04
+thai thong
+it app
+2025
+02
+1
+05
+minh huy
+it devops
+2025
+03
+1
+09
+duc tien
+marketing
+2025
+02
+1
+11
+bennie
+web
+2025
+11
+4
+
+// copy những dòng trên paste vào chương trình và enter để xem hoạt động như thế nào
