@@ -165,12 +165,13 @@ Node *SearchID(Node *root, string id) // id nay la ma manager
 }
 
 void officiallyAdding(vector<Node*>& ds, Node* p) {
-   for (Node* x : ds) {
-      if (x->data.pendingManager == p->data.id) {
-         x->data.manager = p->data.id;
-         x->data.pendingManager = "";
-         p->children.push_back(x);
-         ds.erase(find(ds.begin(), ds.end(), x));
+   for (int i=0; i<ds.size(); i++) {
+      if (ds[i]->data.pendingManager == p->data.id) {
+         ds[i]->data.manager = p->data.id;
+         ds[i]->data.pendingManager = "";
+         p->children.push_back(ds[i]);
+         ds.erase(find(ds.begin(), ds.end(), ds[i]));
+         return;
       }
    }
 }
@@ -308,7 +309,6 @@ void Menu(List& l)
          }
          case 7:
          {
-            
          }
          case 8:
          {
