@@ -3,7 +3,6 @@
 nhan nguyen
 ceo 
 2025
-01
 1
 02
 thu tang
@@ -39,7 +38,15 @@ marketing
 bennie
 web
 2025
-11
+12
+1
+12
+tmt
+sale
+2025
+01
 4
+
+
 
 // copy những dòng trên paste vào chương trình và enter để xem hoạt động như thế nào
