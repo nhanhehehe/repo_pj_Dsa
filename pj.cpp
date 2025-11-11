@@ -20,6 +20,7 @@ struct employee
    string position;
    int year;
    string manager;
+   string pendingManager; // mã quản lý ban đầu không phù hợp, sau này nếu tồn tại sẽ dùng
 };
 
 struct Node
@@ -89,6 +90,42 @@ employee createEmployee()
    return nv;
 }
 
+// tao ceo ( employee date cua Node)
+employee createBoss()
+{
+   employee nv;
+   cout << "=== Nhap thong tin CEO ===\n";
+   cout << "Nhap ma id: ";
+   string id;
+   while (true) {
+      int flag = 1;
+      cin >> id;
+      for (auto x : idArchieve) {
+         if (x == id) {
+            cout << "Ma nhan vien da ton tai!\n";
+            cout << "nhap lai: "; 
+            flag = 0;
+            break;    
+         }
+      }
+      if (flag) {
+         nv.id = id;
+         idArchieve.push_back(id);
+         break;
+      }
+   }
+   cout << "Nhap ten: ";
+   cin.ignore();
+   getline(cin, nv.name);
+   cout << "Nhap vi tri: ";
+   getline(cin, nv.position);
+   cout << "Nhap nam lam viec: ";
+   cin >> nv.year;
+   nv.manager = "NONE";
+   cout << endl << endl;
+   return nv;
+}
+
 // them node vao sau
 // void InsertNode(List &l)
 // {
@@ -110,8 +147,8 @@ employee createEmployee()
 
 
 // ============================ chuc nang 1 ============================
-// tim nhan vien ban id
-Node *SearchID(Node *root, string id)
+//tim nhan vien ban id
+Node *SearchID(Node *root, string id) // id nay la ma manager
 {
    if (root == NULL)
       return NULL;
@@ -125,6 +162,17 @@ Node *SearchID(Node *root, string id)
          return found;
    }
    return NULL;
+}
+
+void officiallyAdding(vector<Node*>& ds, Node* p) {
+   for (Node* x : ds) {
+      if (x->data.pendingManager == p->data.id) {
+         x->data.manager = p->data.id;
+         x->data.pendingManager = "";
+         p->children.push_back(x);
+         ds.erase(find(ds.begin(), ds.end(), x));
+      }
+   }
 }
 
 // them moi nhan vien
@@ -141,6 +189,8 @@ void InsertEmployee(List& l, employee nv)
 
    Node *manager = SearchID(l.first, nv.manager);
    if (manager == NULL) {
+      nv.pendingManager = nv.manager;
+      nv.manager = "UNKNOWN"; // nếu nhân viên không tồn tài mã quản lý. mã manager rỗng và thêm vào waiting list
       employeeWaiting.push_back(createNode(nv));
       cout << "Them nhan vien khong chinh thuc moi\n\n ";
       return;
@@ -148,12 +198,19 @@ void InsertEmployee(List& l, employee nv)
 
    Node *newEmployee = createNode(nv);
    manager->children.push_back(newEmployee);
+   officiallyAdding(employeeWaiting,newEmployee);
    cout << "Them nhan vien thanh cong! " << endl << endl;
 }
 
 //chuc nang 1
 void Function1(List& l) {
-   employee newEmployee = createEmployee();
+   employee newEmployee;
+   if (l.first == NULL) { 
+      newEmployee = createBoss();
+   }
+   else {
+      newEmployee = createEmployee();
+   }
    InsertEmployee(l, newEmployee);
 }
 // ============================================================
@@ -182,10 +239,12 @@ void printOrg(Node *root, int level = 0)
 }
 
 void printUnOF(vector<Node *> ds) {
-   cout << endl;
-   cout << "Danh sach nhan vien khong chinh thuc:\n";
-   for (auto x : ds) {
-      cout << "- " << x->data.id << " | " << x->data.name << " | " << x->data.position << " | " << x->data.year << " | " << x->data.manager << endl;
+   if (!ds.empty()) {
+      cout << endl;
+      cout << "Danh sach nhan vien khong chinh thuc:\n";
+      for (auto x : ds) {
+         cout << "- " << x->data.id << " | " << x->data.name << " | " << x->data.position << " | " << x->data.year << " | " << x->data.manager << endl;
+      }
    }
 }
 
